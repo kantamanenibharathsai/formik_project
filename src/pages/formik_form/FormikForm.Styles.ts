@@ -6,10 +6,10 @@ const formikFormStyles = {
   },
 
   childContainer: {
-    width: {xs:"95%", sm:"70%", md: "60%", lg: "90%"},
+    width: { xs: "95%", sm: "70%", md: "60%", lg: "90%" },
     margin: "auto",
     pt: "4px",
-    pb: "20px"
+    pb: "20px",
   },
 
   header: {
@@ -17,7 +17,8 @@ const formikFormStyles = {
     background: "transparent",
     height: "50px",
     // border: "1px solid black",
-    boxShadow: 'rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px',
+    boxShadow:
+      "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px",
     borderRadius: "12px",
     px: "40px",
     display: "flex",
@@ -43,9 +44,9 @@ const formikFormStyles = {
   },
 
   leftContainer: {
-    width: {lg:"46%", xl:"50%"},
+    width: { lg: "46%", xl: "50%" },
     // border: "3px solid green",
-    display: {xs: "none", lg:"flex"},
+    display: { xs: "none", lg: "flex" },
     flexDirection: "column",
     gap: "50px",
   },
@@ -62,14 +63,14 @@ const formikFormStyles = {
   },
 
   rightContainer: {
-    width: {xs: "100%", lg:"65%", xl: "55%"},
+    width: { xs: "100%", lg: "65%", xl: "55%" },
   },
 
   formParentContainer: {
     borderRadius: "14px",
     background: "##2B4F50",
     boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-    padding: {xs: "10px 6px", sm:"10px 20px 25px 25px"},
+    padding: { xs: "10px 6px", sm: "10px 20px 25px 25px" },
   },
 
   createAccountText: {
@@ -82,18 +83,18 @@ const formikFormStyles = {
 
   formContainer: {
     display: "flex",
-    flexDirecton: {xs: "column", lg: "row"},
-    alignItems: {xs: "strech", lg:"flex-start"},
+    flexDirecton: { xs: "column", lg: "row" },
+    alignItems: { xs: "strech", lg: "flex-start" },
     gap: "7px",
     flexWrap: "wrap",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
 
   labelInputContainer: {
     display: "flex",
     flexDirection: "column",
     gap: "3px",
-    width: {xs: "100%", lg:"49%"},
+    width: { xs: "100%", lg: "49%" },
     // border: "2px solid red",
   },
 
@@ -109,6 +110,10 @@ const formikFormStyles = {
     borderRadius: "7px",
     "& fieldset": {
       border: "none",
+    },
+    "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+      WebkitAppearance: "none",
+      margin: 0,
     },
   },
 
@@ -131,14 +136,14 @@ const formikFormStyles = {
 
   IAgreeText: {
     fontFamily: "Roboto",
-    fontSize: {xs:"10px", sm:"12px"},
+    fontSize: { xs: "10px", sm: "12px" },
     fontWeight: "200",
     color: "white",
   },
 
   privacyPolicyText: {
     fontFamily: "Roboto",
-    fontSize: {xs:"10px", sm:"12px"},
+    fontSize: { xs: "10px", sm: "12px" },
     fontWeight: "900",
     color: "white",
   },
@@ -162,26 +167,26 @@ const formikFormStyles = {
     mt: "10px",
   },
 
-  passwordIconContainer : {
+  passwordIconContainer: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
 
-  infoOutlinedIcon : {
+  infoOutlinedIcon: {
     color: "white",
     width: "16px",
-    height: "16px"
+    height: "16px",
   },
 
-  passErrCloseIconContainer : {
+  passErrCloseIconContainer: {
     display: "flex",
     justifyContent: "space-beween",
     alignItems: "center",
     padding: "10px",
     background: "#FEE3E2",
     borderLeft: "2px solid red",
-    borderRadius: "10px"
+    borderRadius: "10px",
   },
 
   passwordError: {
@@ -194,8 +199,8 @@ const formikFormStyles = {
   closeIcon: {
     width: "14px",
     height: "14px",
-    color: "red"
-  }
+    color: "red",
+  },
 };
 
 export default formikFormStyles;

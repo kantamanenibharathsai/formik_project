@@ -1,27 +1,26 @@
 import { Box, Button, Checkbox, FormHelperText, TextField, Typography, } from "@mui/material";
 import formikFormStyles from "./FormikForm.Styles";
-import Header from "../../components/header/Header";
-import { Field, Form, Formik, FormikProps } from "formik";
+import { Field, Form, Formik, } from "formik";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import * as Yup from "yup"
 import YupPassword from 'yup-password'
 import "yup-phone-lite";
 import { useState } from "react";
-import { error } from "console";
 YupPassword(Yup)
 
 
 interface IState {
-
+    checked: boolean,
+    textColor: string,
+    isInfoIconHovered: boolean
 }
 
 
 const FormikForm = () => {
-    const [isInfoIconHovered, setIsInfoIconHovered] = useState(false);
-    const [checked, setChecked] = useState(false);
-    const [textColor, setTextColor] = useState('white')
-
+    const [isInfoIconHovered, setIsInfoIconHovered] = useState<IState["isInfoIconHovered"]>(false);
+    const [checked, setChecked] = useState<IState["checked"]>(false);
+    const [textColor, setTextColor] = useState<IState["textColor"]>('white')
 
 
     const validationSchema = Yup.object({
@@ -54,29 +53,25 @@ const FormikForm = () => {
     });
 
 
-    const handleSubmit = () => {
-        console.log("form submitted");
+    const handleSubmit = (values: IState) => {
         alert("login successful")
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
-        setTextColor("white")
-        console.log(event.target.checked)
+        setTextColor("white");
     };
 
     const onClickCreateAccountButton = () => {
-        // console.log(checked)
         if (checked === false) {
             setTextColor("yellow");
             setChecked(false);
         }
-        // else setChecked(false)
     }
+
 
     return (
         <Box sx={formikFormStyles.mainContainer}>
-            {/* <Header/> */}
             <Box sx={formikFormStyles.childContainer}>
                 <Box sx={formikFormStyles.header}>
                     <Typography sx={formikFormStyles.logoText}>LOGO</Typography>
@@ -90,15 +85,30 @@ const FormikForm = () => {
                         <Box sx={formikFormStyles.formParentContainer}>
                             <Typography sx={formikFormStyles.createAccountText}>Create Account</Typography>
                             <Formik
-                                initialValues={{ givenName: "", familyName: "", preferredName: "", email: '', password: "", address: "", phoneNumber: "", country: "", city: "", designation: "", companyOrganisation: "", approxNumOfAssets: "", checkbox: false }}
+                                initialValues={{
+                                    checked: false,
+                                    textColor: 'white',
+                                    isInfoIconHovered: false,
+                                    givenName: "",
+                                    familyName: "",
+                                    preferredName: "",
+                                    email: '',
+                                    password: "",
+                                    address: "",
+                                    phoneNumber: "",
+                                    country: "",
+                                    city: "",
+                                    designation: "",
+                                    companyOrganisation: "",
+                                    approxNumOfAssets: "",
+                                    checkbox: false
+                                }}
                                 onSubmit={handleSubmit}
                                 validationSchema={validationSchema}
                                 validateOnBlur={true}
-                                validateOnChange={true}
-
                             >
-                                {({ errors, touched, }) => (
-                                    <Form onSubmit={handleSubmit}>
+                                {({ errors, touched, values }) => (
+                                    <Form>
                                         <Box sx={formikFormStyles.formContainer}>
                                             <Box sx={formikFormStyles.labelInputContainer}>
                                                 <Box component="label" sx={formikFormStyles.labelText} htmlFor="givenName">
@@ -107,12 +117,10 @@ const FormikForm = () => {
                                                 <Field id="givenName" type="text" name="givenName" as={TextField} sx={formikFormStyles.inputField} />
                                                 {(checked && errors.givenName === undefined && touched.givenName === undefined) && (
                                                     (() => {
-                                                        // console.log("inside jsx" ,checked, errors.givenName, touched.givenName);
-                                                        // console.log("checking equality", errors, touched)
                                                         return <FormHelperText sx={formikFormStyles.errorMsg}>*Given Name Required"</FormHelperText>;
                                                     })()
                                                 )}
-                                                {(checked && errors.givenName && touched.givenName) && (
+                                                {(checked && (errors.givenName || touched.givenName)) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>{errors.givenName}</FormHelperText>
                                                 )}
                                             </Box>
@@ -122,14 +130,14 @@ const FormikForm = () => {
                                                 </Box>
                                                 <Field id="familyName" type="text" name="familyName" as={TextField} sx={formikFormStyles.inputField} />
                                                 {(checked && errors.familyName === undefined && touched.familyName === undefined) && (<FormHelperText sx={formikFormStyles.errorMsg}>*Family Name Required"</FormHelperText>)}
-                                                {(checked && errors.familyName && touched.familyName) && (<FormHelperText sx={formikFormStyles.errorMsg}>{errors.familyName}</FormHelperText>)}
+                                                {(checked && (errors.familyName || touched.familyName)) && (<FormHelperText sx={formikFormStyles.errorMsg}>{errors.familyName}</FormHelperText>)}
 
                                             </Box>
                                             <Box sx={formikFormStyles.labelInputContainer}>
                                                 <Box component="label" sx={formikFormStyles.labelText} htmlFor="preferredName">
                                                     Preferred Name
                                                 </Box>
-                                                <Field id="preferredName" type="text" name="preferredName" as={TextField} sx={formikFormStyles.inputField} />
+                                                <Field id="preferredName" value={values.checked && values.preferredName === "" ? values.givenName : values.preferredName} type="text" name="preferredName" as={TextField} sx={formikFormStyles.inputField} />
 
                                             </Box>
                                             <Box sx={formikFormStyles.labelInputContainer}>
@@ -140,7 +148,7 @@ const FormikForm = () => {
                                                 {(checked && errors.email === undefined && touched.email === undefined) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>*Email Required</FormHelperText>
                                                 )}
-                                                {(checked && errors.email && touched.email) && (
+                                                {(checked && (errors.email || touched.email)) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>{errors.email}</FormHelperText>
                                                 )}
                                             </Box>
@@ -153,10 +161,10 @@ const FormikForm = () => {
                                                         onMouseLeave={() => setIsInfoIconHovered(false)} sx={formikFormStyles.infoOutlinedIcon} />
                                                 </Box>
                                                 <Field id="password" type="text" name="password" as={TextField} sx={formikFormStyles.inputField} />
-                                                {(checked && errors.password !== undefined && touched.password !== undefined) && (
+                                                {(checked && errors.password === undefined && touched.password === undefined) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>*Password Required</FormHelperText>
                                                 )}
-                                                {(checked && errors.password && touched.password) && (
+                                                {(checked && (errors.password || touched.password)) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>{errors.password}</FormHelperText>
                                                 )}
                                                 {isInfoIconHovered && (
@@ -177,11 +185,11 @@ const FormikForm = () => {
                                                 <Box component="label" sx={formikFormStyles.labelText} htmlFor="phoneNumber">
                                                     Phone Number*
                                                 </Box>
-                                                <Field id="phoneNumber" type="text" name="phoneNumber" as={TextField} sx={formikFormStyles.inputField} />
+                                                <Field id="phoneNumber" type="number" name="phoneNumber" as={TextField} sx={formikFormStyles.inputField} />
                                                 {(checked && errors.phoneNumber === undefined && touched.phoneNumber === undefined) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>*PhoneNumber Required</FormHelperText>
                                                 )}
-                                                {(checked && errors.phoneNumber && touched.phoneNumber) && (
+                                                {(checked && (errors.phoneNumber || touched.phoneNumber)) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>{errors.phoneNumber}</FormHelperText>
                                                 )}
                                             </Box>
@@ -193,7 +201,7 @@ const FormikForm = () => {
                                                 {(checked && errors.country === undefined && touched.country === undefined) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>*Country Required</FormHelperText>
                                                 )}
-                                                {(checked && errors.country && touched.country) && (
+                                                {(checked && (errors.country || touched.country)) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>{errors.country}</FormHelperText>
                                                 )}
                                             </Box>
@@ -203,9 +211,9 @@ const FormikForm = () => {
                                                 </Box>
                                                 <Field id="city" type="text" name="city" as={TextField} sx={formikFormStyles.inputField} />
                                                 {(checked && errors.city === undefined && touched.city === undefined) && (
-                                                    <FormHelperText sx={formikFormStyles.errorMsg}>{errors.city}</FormHelperText>
+                                                    <FormHelperText sx={formikFormStyles.errorMsg}>*City Required</FormHelperText>
                                                 )}
-                                                {(checked && errors.city && touched.city) && (
+                                                {(checked && (errors.city || touched.city)) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>{errors.city}</FormHelperText>
                                                 )}
                                             </Box>
@@ -217,7 +225,7 @@ const FormikForm = () => {
                                                 {(checked && errors.designation === undefined && touched.designation === undefined) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>*Designation required</FormHelperText>
                                                 )}
-                                                {(checked && errors.designation && touched.designation) && (
+                                                {(checked && (errors.designation || touched.designation)) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>{errors.designation}</FormHelperText>
                                                 )}
                                             </Box>
@@ -229,7 +237,7 @@ const FormikForm = () => {
                                                 {(checked && errors.companyOrganisation === undefined && touched.companyOrganisation === undefined) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>*companyOrganisation required</FormHelperText>
                                                 )}
-                                                {(checked && errors.companyOrganisation && touched.companyOrganisation) && (
+                                                {(checked && (errors.companyOrganisation || touched.companyOrganisation)) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>{errors.companyOrganisation}</FormHelperText>
                                                 )}
                                             </Box>
@@ -253,7 +261,6 @@ const FormikForm = () => {
                             <Typography sx={{ ...formikFormStyles.IAgreeText, ...formikFormStyles.alreadyText }}>Already have an account ? <Box sx={formikFormStyles.privacyPolicyText} component="span">log in</Box></Typography>
                         </Box>
                     </Box>
-
                 </Box>
             </Box>
 
