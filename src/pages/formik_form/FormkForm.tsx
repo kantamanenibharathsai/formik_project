@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, FormHelperText, TextField, Typography, } from "@mui/material";
+import { Box, Button, Checkbox, FormHelperText, InputAdornment, TextField, Typography, } from "@mui/material";
 import formikFormStyles from "./FormikForm.Styles";
 import { Field, Form, Formik, } from "formik";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
@@ -7,20 +7,27 @@ import * as Yup from "yup"
 import YupPassword from 'yup-password'
 import "yup-phone-lite";
 import { useState } from "react";
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import WestOutlinedIcon from '@mui/icons-material/WestOutlined';
+import { useNavigate } from "react-router-dom";
 YupPassword(Yup)
 
 
 interface IState {
     checked: boolean,
     textColor: string,
-    isInfoIconHovered: boolean
+    isInfoIconHovered: boolean,
+    isPasswordVisible: boolean
 }
 
 
 const FormikForm = () => {
     const [isInfoIconHovered, setIsInfoIconHovered] = useState<IState["isInfoIconHovered"]>(false);
     const [checked, setChecked] = useState<IState["checked"]>(false);
-    const [textColor, setTextColor] = useState<IState["textColor"]>('white')
+    const [textColor, setTextColor] = useState<IState["textColor"]>('white');
+    const [isPasswordVisible, setIsPasswordVisible] = useState<IState["isPasswordVisible"]>(false)
+    const navigate = useNavigate()
 
 
     const validationSchema = Yup.object({
@@ -30,9 +37,6 @@ const FormikForm = () => {
         familyName: Yup.string()
             .min(3, "Family Name must be minimum 3 characters")
             .required("*Family Name Required"),
-        preferredName: Yup.string()
-            .min(3, "Preferred Name must be minimum 3 characters")
-            .required("*Preferred Name Required"),
         phoneNumber: Yup.string()
             .phone("IN", "Please enter a valid phone number")
             .min(10, "too short")
@@ -49,12 +53,15 @@ const FormikForm = () => {
         city: Yup.string().required("*City Required"),
         designation: Yup.string().required("*Designation Required"),
         companyOrganisation: Yup.string().required("*Company Required"),
-        approxNumOfAssets: Yup.string().required("*Assets Required"),
     });
 
 
+    const passwordVisibleOrNotHandler = () => {
+        setIsPasswordVisible(!isPasswordVisible)
+    }
+
     const handleSubmit = (values: IState) => {
-        alert("login successful")
+        navigate("/success", {state: JSON.stringify(values)})
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +85,7 @@ const FormikForm = () => {
                 </Box>
                 <Box sx={formikFormStyles.bodyContainer}>
                     <Box sx={formikFormStyles.leftContainer}>
-                        <Box component="img" src="https://img.freepik.com/premium-vector/nature-smooth-logo-vector-art-design_860056-30.jpg" alt="logo" sx={formikFormStyles.logo} />
+                        <WestOutlinedIcon sx={formikFormStyles.leftArrowIcon} />
                         <Box component="img" src="https://freedomhouse.org/sites/default/files/2023-02/FH_World_map_2023_master.png" alt="world-map" sx={formikFormStyles.worldMapImage} />
                     </Box>
                     <Box sx={formikFormStyles.rightContainer}>
@@ -101,7 +108,8 @@ const FormikForm = () => {
                                     designation: "",
                                     companyOrganisation: "",
                                     approxNumOfAssets: "",
-                                    checkbox: false
+                                    checkbox: false,
+                                    isPasswordVisible: false
                                 }}
                                 onSubmit={handleSubmit}
                                 validationSchema={validationSchema}
@@ -137,7 +145,7 @@ const FormikForm = () => {
                                                 <Box component="label" sx={formikFormStyles.labelText} htmlFor="preferredName">
                                                     Preferred Name
                                                 </Box>
-                                                <Field id="preferredName" value={values.checked && values.preferredName === "" ? values.givenName : values.preferredName} type="text" name="preferredName" as={TextField} sx={formikFormStyles.inputField} />
+                                                <Field id="preferredName" value={!values.checked && values.preferredName === "" ? values.givenName : values.preferredName} type="text" name="preferredName" as={TextField} sx={formikFormStyles.inputField} />
 
                                             </Box>
                                             <Box sx={formikFormStyles.labelInputContainer}>
@@ -160,7 +168,14 @@ const FormikForm = () => {
                                                     <InfoOutlinedIcon onMouseEnter={() => setIsInfoIconHovered(true)}
                                                         onMouseLeave={() => setIsInfoIconHovered(false)} sx={formikFormStyles.infoOutlinedIcon} />
                                                 </Box>
-                                                <Field id="password" type="text" name="password" as={TextField} sx={formikFormStyles.inputField} />
+                                                <Field id="password" type={isPasswordVisible ? "text" : "password"} name="password" as={TextField} sx={formikFormStyles.inputField} InputProps={{
+                                                    endAdornment: <InputAdornment position="end">
+                                                        {isPasswordVisible ?
+                                                            <VisibilityOutlinedIcon onClick={passwordVisibleOrNotHandler} /> :
+                                                            <VisibilityOffOutlinedIcon onClick={passwordVisibleOrNotHandler} />
+                                                        }
+                                                    </InputAdornment>,
+                                                }} />
                                                 {(checked && errors.password === undefined && touched.password === undefined) && (
                                                     <FormHelperText sx={formikFormStyles.errorMsg}>*Password Required</FormHelperText>
                                                 )}

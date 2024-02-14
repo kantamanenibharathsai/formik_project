@@ -51,6 +51,10 @@ const formikFormStyles = {
     gap: "50px",
   },
 
+  leftArrowIcon : {
+    color: "#fff"
+  },
+
   logo: {
     width: "60px",
     height: "60px",
